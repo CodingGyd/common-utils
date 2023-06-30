@@ -8,7 +8,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-
+/**
+ * @description:   gzip压缩和解压
+ */
 public class ZipUtils {
 	private static final int BUFFER_SIZE = 4096;
 
@@ -78,7 +80,7 @@ public class ZipUtils {
 	 * Description:使用gzip进行解压缩
 	 * </p>
 	 * 
-	 * @param compressedStr
+	 * @param compressed
 	 * @return
 	 */
 	public static byte[] gunzip(byte[] compressed) {
