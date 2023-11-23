@@ -14,8 +14,39 @@ import java.util.Map;
 
 import org.apache.poi.ss.usermodel.DateUtil;
 
-public class DateUtils {
+public class DateUtils  extends org.apache.commons.lang3.time.DateUtils{
 	private static List<String> seasonsDate = Arrays.asList("0331","0630","0930","1231");
+
+	public static Date getLastYearToday(){
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.YEAR, -1);
+		return cal.getTime();
+	}
+
+	public static Date getLastMonthToday(){
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.MONTH, -1);
+		return cal.getTime();
+	}
+
+	public static String formatDateTime(long mss) {
+		long days = mss / 86400L;
+		long hours = mss % 86400L / 3600L;
+		long minutes = mss % 3600L / 60L;
+		long seconds = mss % 60L;
+		String dateTimes;
+		if (days > 0L) {
+			dateTimes = days + "天" + hours + "小时" + minutes + "分钟" + seconds + "秒";
+		} else if (hours > 0L) {
+			dateTimes = hours + "小时" + minutes + "分钟" + seconds + "秒";
+		} else if (minutes > 0L) {
+			dateTimes = minutes + "分钟" + seconds + "秒";
+		} else {
+			dateTimes = seconds + "秒";
+		}
+
+		return dateTimes;
+	}
 
 	 /**
      * 格式化日期，时分秒重置为0

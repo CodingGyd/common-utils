@@ -4,7 +4,6 @@ import java.text.DecimalFormat;
 
 public class FormatUtil {
 
-	
 	 public static String getCommaFormat(Double value,String def){  
 		 if (null == value) {
 			 return def;
@@ -17,7 +16,7 @@ public class FormatUtil {
 	 * 数值格式化
 	 * @param origin 原始值
 	 * @param scale 扩大多少倍
-	 * @param suffus 后缀
+	 * @param suffux 后缀
 	 * @param def 默认值
 	 * @return
 	 */

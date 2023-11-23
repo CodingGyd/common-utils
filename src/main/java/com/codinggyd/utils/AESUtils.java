@@ -1,24 +1,23 @@
 package com.codinggyd.utils;
 
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 
+/**
+ * 加解密工具
+ */
 public class AESUtils {
+	private static ThreadLocal<Cipher> threadLocal = new ThreadLocal<>();
 
 	/**
 	 * 加密
-	 * 
-	 * @param content
-	 *            需要加密的内容
-	 * @param password
-	 *            加密密码
-	 * @param keySize
-	 *            密钥长度16,24,32
+	 * @param content 需要加密的内容
+	 * @param password 加密密码
+	 * @param keySize 密钥长度16,24,32
 	 * @return
 	 * @throws Exception
 	 */
@@ -33,13 +32,9 @@ public class AESUtils {
 
 	/**
 	 * 加密
-	 * 
-	 * @param content
-	 *            需要加密的内容
-	 * @param password
-	 *            加密密码
-	 * @param keySize
-	 *            密钥长度16,24,32
+	 * @param content 需要加密的内容
+	 * @param password 加密密码
+	 * @param keySize 密钥长度16,24,32
 	 * @return
 	 * @throws Exception
 	 */
@@ -54,13 +49,9 @@ public class AESUtils {
 
 	/**
 	 * 加密
-	 * 
-	 * @param content
-	 *            需要加密的内容
-	 * @param password
-	 *            加密密码
-	 * @param keySize
-	 *            密钥长度16,24,32
+	 * @param content 需要加密的内容
+	 * @param keys 加密密码
+	 * @param keySize 密钥长度16,24,32
 	 * @return
 	 * @throws Exception
 	 */
@@ -75,36 +66,25 @@ public class AESUtils {
 
 	/**
 	 * 解密
-	 * 
-	 * @param content
-	 *            待解密内容
-	 * @param password
-	 *            解密密钥
-	 * @param keySize
-	 *            密钥长度16,24,32
+	 * @param content 待解密内容
+	 * @param password 解密密钥
+	 * @param keySize 密钥长度16,24,32
 	 * @return
 	 * @throws UnsupportedEncodingException
-	 * @throws ServiceException
+	 * @throws Exception
 	 */
 	public static byte[] decrypt(byte[] content, String password, int keySize) throws Exception {
 		return decrypt(content, password.getBytes("GBK"), keySize);
-
 	}
-
-	static ThreadLocal<Cipher> threadLocal = new ThreadLocal<>();
 
 	/**
 	 * 解密
-	 * 
-	 * @param content
-	 *            待解密内容
-	 * @param password
-	 *            解密密钥
-	 * @param keySize
-	 *            密钥长度16,24,32
+	 * @param content 待解密内容
+	 * @param keys 解密密钥
+	 * @param keySize 密钥长度16,24,32
 	 * @return
 	 * @throws UnsupportedEncodingException
-	 * @throws ServiceException
+	 * @throws Exception
 	 */
 	public static byte[] decrypt(byte[] content, byte[] keys, int keySize) throws Exception {
 		SecretKeySpec key = new SecretKeySpec(ZeroPadding(keys, keySize), "AES");
@@ -116,49 +96,6 @@ public class AESUtils {
 //		Log.debug("解密:[{}]", System.currentTimeMillis() - start);
 		return result; // 加密
 	}
-	static Cipher getCipher() throws NoSuchAlgorithmException, NoSuchPaddingException{
-		Cipher cipher=threadLocal.get();
-		if(cipher==null){
-			cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-			threadLocal.set(cipher);
-		}
-		return cipher;
-	}
-	// /**
-	// * 将二进制转换成16进制
-	// *
-	// * @param buf
-	// * @return
-	// */
-	// public static String parseByte2HexStr(byte buf[]) {
-	// StringBuffer sb = new StringBuffer();
-	// for (int i = 0; i < buf.length; i++) {
-	// String hex = Integer.toHexString(buf[i] & 0xFF);
-	// if (hex.length() == 1) {
-	// hex = '0' + hex;
-	// }
-	// sb.append(hex.toUpperCase());
-	// }
-	// return sb.toString();
-	// }
-	//
-	// /**
-	// * 将16进制转换为二进制
-	// *
-	// * @param hexStr
-	// * @return
-	// */
-	// public static byte[] parseHexStr2Byte(String hexStr) {
-	// if (hexStr.length() < 1)
-	// return null;
-	// byte[] result = new byte[hexStr.length() / 2];
-	// for (int i = 0; i < hexStr.length() / 2; i++) {
-	// int high = Integer.parseInt(hexStr.substring(i * 2, i * 2 + 1), 16);
-	// int low = Integer.parseInt(hexStr.substring(i * 2 + 1, i * 2 + 2), 16);
-	// result[i] = (byte) (high * 16 + low);
-	// }
-	// return result;
-	// }
 
 	public static byte[] ZeroPadding(byte[] in, Integer blockSize) {
 		Integer copyLen = in.length;
@@ -169,5 +106,15 @@ public class AESUtils {
 		System.arraycopy(in, 0, out, 0, copyLen);
 		return out;
 	}
+
+	static Cipher getCipher() throws NoSuchAlgorithmException, NoSuchPaddingException{
+		Cipher cipher=threadLocal.get();
+		if(cipher==null){
+			cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+			threadLocal.set(cipher);
+		}
+		return cipher;
+	}
+
 
 }
