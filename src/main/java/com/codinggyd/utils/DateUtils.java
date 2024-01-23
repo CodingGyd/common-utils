@@ -12,10 +12,113 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.poi.ss.usermodel.DateUtil;
 
 public class DateUtils  extends org.apache.commons.lang3.time.DateUtils{
 	private static List<String> seasonsDate = Arrays.asList("0331","0630","0930","1231");
+
+	/**
+	 * 获取上年同一天的开始时间
+	 * @return
+	 */
+	public static Date getStartTimeOfLastYearCurrentDay(Date date){
+		Calendar calendar = Calendar.getInstance();
+		calendar.clear();
+		calendar.setTime(date);
+		calendar.add(Calendar.YEAR, -1);
+		setMinTimeOfDay(calendar);
+		return calendar.getTime();
+	}
+	/**
+	 * 获取上年同一天的结束时间
+	 * @return
+	 */
+	public static Date getEndTimeOfLastYearCurrentDay(Date date){
+		Calendar calendar = Calendar.getInstance();
+		calendar.clear();
+		calendar.setTime(date);
+		calendar.add(Calendar.YEAR, -1);
+		setMaxTimeOfDay(calendar);
+		return calendar.getTime();
+	}
+
+	/**
+	 * 获取上个月同一天的开始时间
+	 * @return
+	 */
+	public static Date getStartTimeOfLastMonthCurrentDay(Date date){
+		Calendar calendar = Calendar.getInstance();
+		calendar.clear();
+		calendar.setTime(date);
+		calendar.add(Calendar.MONTH, -1);
+		setMinTimeOfDay(calendar);
+		return calendar.getTime();
+	}
+	/**
+	 * 获取上个月同一天的结束时间
+	 * @return
+	 */
+	public static Date getEndTimeOfLastMonthCurrentDay(Date date){
+		Calendar calendar = Calendar.getInstance();
+		calendar.clear();
+		calendar.setTime(date);
+		calendar.add(Calendar.MONTH, -1);
+		setMaxTimeOfDay(calendar);
+		return calendar.getTime();
+	}
+	/**
+	 * 获取指定天的开始时间
+	 * @return
+	 */
+	public static Date getStartTimeOfCurrentDay(Date date){
+		Calendar calendar = Calendar.getInstance();
+		calendar.clear();
+		calendar.setTime(date);
+		setMinTimeOfDay(calendar);
+		return calendar.getTime();
+	}
+
+	/**
+	 * 获取指定天的结束时间
+	 * @return
+	 */
+	public static Date getEndTimeOfCurrentDay(Date date){
+		Calendar calendar = Calendar.getInstance();
+		calendar.clear();
+		calendar.setTime(date);
+		setMaxTimeOfDay(calendar);
+		return calendar.getTime();
+	}
+
+	public static Date getStartTimeOfCurrentMonth(Date date){
+		Calendar calendar = Calendar.getInstance();
+		calendar.clear();
+		calendar.setTime(date);
+		calendar.set(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),1);
+		setMinTimeOfDay(calendar);
+		return calendar.getTime();
+	}
+
+	/**
+	 * 设置当天的开始时间
+	 * @param calendar
+	 */
+	private static void setMinTimeOfDay(Calendar calendar) {
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+	}
+	/**
+	 * 设置当天的结束时间
+	 * @param calendar
+	 */
+	private static void setMaxTimeOfDay(Calendar calendar) {
+		calendar.set(Calendar.HOUR_OF_DAY, 23);
+		calendar.set(Calendar.SECOND, 59);
+		calendar.set(Calendar.MINUTE, 59);
+		calendar.set(Calendar.MILLISECOND, 999);
+	}
+
 
 	public static Date getLastYearToday(){
 		Calendar cal = Calendar.getInstance();
@@ -235,4 +338,23 @@ public class DateUtils  extends org.apache.commons.lang3.time.DateUtils{
 			calendar.set(Calendar.SECOND, calendar.getActualMaximum(Calendar.SECOND));
 			calendar.set(Calendar.MILLISECOND, calendar.getActualMaximum(Calendar.MILLISECOND));
 		}
+
+		//获取时间进度百分比
+	public static Long getProgress(Date startDate,Date endDate){
+		Date nowDate = new Date();  //当前时间
+		if (nowDate.getTime() <= startDate.getTime()) {
+			//未开始进度设置为0
+			return 0L;
+		} else if (nowDate.getTime() >= endDate.getTime()) {
+			//已结束进度设置为100
+			return 1L;
+		} else {
+			//结束时间和开始时间中间的天数
+			Double a = (double) ((endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
+			//当前时间和开始时间中间的天数
+			Double b = (double) ((nowDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24));
+			//计算百分比存入
+			return Math.round(b / a * 100);
+		}
+	}
 }

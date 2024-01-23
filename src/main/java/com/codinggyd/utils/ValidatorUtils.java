@@ -1,5 +1,7 @@
 package com.codinggyd.utils;
 
+import com.codinggyd.User;
+
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -36,5 +38,13 @@ public class ValidatorUtils {
             }
             throw new RuntimeException(builder.toString());
         }
+    }
+
+    public static void main(String[] args) {
+        User user = new User();
+        user.setAge(9);
+        user.setName("xx");
+        user.setSex("1");
+        ValidatorUtils.validate(user);
     }
 }
